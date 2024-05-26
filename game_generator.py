@@ -2,25 +2,17 @@
 
 import csv
 import logging
-import os
 from textwrap import dedent
-
-from openai import OpenAI
 
 import random
 import decimal
 
+from api_utils import client, generate_response
+
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-# Load constants from environment variables
-MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
-NUM_EXAMPLES = int(os.getenv("NUM_EXAMPLES", "1"))
-OUTPUT_FILE = os.getenv("OUTPUT_FILE", "pairs.csv")
-OPENAI_API_KEY = os.getenv
-
-client = OpenAI(api_key="")
 
 def generate_game(category, game_type, num_rounds, lpayoff, mpayoff, hpayoff):
     """Generate a prompt string for a given topic."""
@@ -46,23 +38,8 @@ def generate_examples(num_examples, category, game_type, num_rounds, lpayoff, mp
 
     for example_num in range(num_examples):
         try:
-            completion = client.chat.completions.create(
-                model=MODEL,
-                messages=[
-                    {
-                        "role": "system",
-                        "content": "You are a research assistant to a game theory professor."
-                    },
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
-                ],
-                seed=example_num,
-            )
-            response = completion.choices[0].message.content.strip()
-            first_example =  response
-            examples.append((category, first_example))
+            response = generate_response(prompt, example_num=example_num)
+            examples.append((category, response))
         except client.APIError as e:
             logger.error(f"OpenAI API error: {str(e)}")
         except Exception as e:
