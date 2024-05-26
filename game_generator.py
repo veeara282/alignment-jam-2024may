@@ -76,7 +76,7 @@ def main():
     
     game_type = random.randrange(0, 5)
 
-    num_rounds = random.randrange(0, 10)
+    num_rounds = 10
 
     lpayoff = 1
     mpayoff = 5
