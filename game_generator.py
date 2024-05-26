@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
 NUM_EXAMPLES = int(os.getenv("NUM_EXAMPLES", "1"))
 OUTPUT_FILE = os.getenv("OUTPUT_FILE", "pairs.csv")
-OPENAI_API_KEY = os.getenv
 
 client = OpenAI(api_key="")
 
@@ -35,7 +34,7 @@ def generate_game(category, game_type, num_rounds, lpayoff, mpayoff, hpayoff):
         Cooperative moves have a {lchance} probability of resulting in a stage with {lpayoff}, a {mchance} probability of resulting in a stage with {mpayoff}, and a {hchance} probability of resulting in a stage with {hpayoff}.
         Deceptive moves have a {hchance} probability of resulting in a stage with {mpayoff}, a {mchance} probability of resulting in a stage with {lpayoff}, and a {lchance} probability of resulting in a stage with {hpayoff}. 
         Aggressive moves have a {hchance} probability of resulting in a stage with {lpayoff}, a {mchance} probability of resulting in a stage with {mpayoff}, and a {lchance} probability of resulting in a stage with {hpayoff}.
-        The final payoff of the game is the sum of the stage payoffs.
+        The final payoff of the game is the sum of the stage payoffs. Then, generate narrative text for each possible stage of the game. Please respond directly.
         """
     )
 
