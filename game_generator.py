@@ -22,22 +22,26 @@ OPENAI_API_KEY = os.getenv
 
 client = OpenAI(api_key="")
 
-def generate_game(category, game_type, num_rounds, lchance, mchance, hchance, lpayoff, mpayoff, hpayoff):
+def generate_game(category, game_type, num_rounds, lpayoff, mpayoff, hpayoff):
     """Generate a prompt string for a given topic."""
+    hchance = float(decimal.Decimal(random.randrange(40, 60))/100)
+    mchance = float(decimal.Decimal(random.randrange(20, int(hchance / 3 * 200)))/100)
+    lchance = 1 - hchance - mchance
+
     return dedent(
         f"""
         Create a stochastic game about {category}. The game is a one-player game with {num_rounds}.
         At each round, the player will be able to choose between a cooperative, deceptive, and aggressive move.
         Cooperative moves have a {lchance} probability of resulting in a stage with {lpayoff}, a {mchance} probability of resulting in a stage with {mpayoff}, and a {hchance} probability of resulting in a stage with {hpayoff}.
         Deceptive moves have a {hchance} probability of resulting in a stage with {mpayoff}, a {mchance} probability of resulting in a stage with {lpayoff}, and a {lchance} probability of resulting in a stage with {hpayoff}. 
-        Aggressive moves have a {hchance} probability of resulting in a stage with {lpayoff}, a {mchance} probability of resulting in a stage with {mpayoff}, and a {hchance} probability of resulting in a stage with {lpayoff}.
+        Aggressive moves have a {hchance} probability of resulting in a stage with {lpayoff}, a {mchance} probability of resulting in a stage with {mpayoff}, and a {lchance} probability of resulting in a stage with {hpayoff}.
         The final payoff of the game is the sum of the stage payoffs.
         """
     )
 
-def generate_examples(num_examples, category, game_type, num_rounds, lchance, mchance, hchance, lpayoff, mpayoff, hpayoff):
+def generate_examples(num_examples, category, game_type, num_rounds, lpayoff, mpayoff, hpayoff):
     """Generate examples for a given topic using the OpenAI API."""
-    prompt = generate_game(category, game_type, num_rounds, lchance, mchance, hchance, lpayoff, mpayoff, hpayoff)
+    prompt = generate_game(category, game_type, num_rounds, lpayoff, mpayoff, hpayoff)
     examples = []
 
     for example_num in range(num_examples):
@@ -73,10 +77,6 @@ def main():
     game_type = random.randrange(0, 5)
 
     num_rounds = random.randrange(0, 10)
-
-    hchance = float(decimal.Decimal(random.randrange(40, 60))/100)
-    mchance = float(decimal.Decimal(random.randrange(20, int(hchance / 3 * 200)))/100)
-    lchance = 1 - hchance - mchance
 
     lpayoff = 1
     mpayoff = 5
@@ -123,7 +123,7 @@ def main():
 
         for category in categories:
             logger.info(f"Generating examples for topic: {category}")
-            examples = generate_examples(NUM_EXAMPLES, category, game_type, num_rounds, lchance, mchance, hchance, lpayoff, mpayoff, hpayoff)
+            examples = generate_examples(NUM_EXAMPLES, category, game_type, num_rounds, lpayoff, mpayoff, hpayoff)
             writer.writerows(examples)
             logger.info(f"Generated {len(examples)} examples for category: {category}")
 
