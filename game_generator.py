@@ -15,8 +15,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Load constants from environment variables
-MODEL = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
-NUM_EXAMPLES = int(os.getenv("NUM_EXAMPLES", "5"))
+MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
+NUM_EXAMPLES = int(os.getenv("NUM_EXAMPLES", "1"))
 OUTPUT_FILE = os.getenv("OUTPUT_FILE", "pairs.csv")
 OPENAI_API_KEY = os.getenv
 
@@ -60,10 +60,10 @@ def generate_examples(num_examples, category, game_type, num_rounds, lpayoff, mp
                 ],
                 seed=example_num,
             )
-            response = completion["choices"][0]["message"]["content"].strip().replace("\n", "")
+            response = completion.choices[0].message.content.strip()
             first_example =  response
             examples.append((category, first_example))
-        except client.error.APIError as e:
+        except client.APIError as e:
             logger.error(f"OpenAI API error: {str(e)}")
         except Exception as e:
             logger.error(f"Unexpected error: {str(e)}")
@@ -119,7 +119,7 @@ def main():
 
     with open(OUTPUT_FILE, "w", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow(["Topic", "First Example", "Second Example", "Third Example", "Fourth Example", "Fifth Example"])
+        writer.writerow(["Topic", "Example"])
 
         for category in categories:
             logger.info(f"Generating examples for topic: {category}")
