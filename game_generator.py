@@ -152,8 +152,8 @@ Your Response:
 
 def generate_chances():
     hchance = float(decimal.Decimal(random.randrange(40, 60))/100)
-    mchance = float(decimal.Decimal(random.randrange(20, int(self.hchance / 3 * 200)))/100)
-    lchance = 1 - self.hchance - self.mchance
+    mchance = float(decimal.Decimal(random.randrange(20, int(hchance / 3 * 200)))/100)
+    lchance = 1 - hchance - mchance
     return hchance, mchance, lchance
 
 def game_loop(num_rounds, lpayoff, mpayoff, hpayoff, lchance, mchance, hchance):
