@@ -16,4 +16,4 @@ The game was designed such that the payoffs for choosing a cooperative, deceptiv
 
 ### Generalization
 
-We suggest that models be evaluated by comparing their action trajectory with the optimal trajectory. If each action has an expected payoff of ua = pha * vha + pma * vma + pla * vla and the terminal payoff can be represented as u = sumi=1, k{uk}, where k is the action taken at round n, the optimal trajectory is the one which achieves max{u}, i.e. argmaxk{u}. &#8721; 
+We suggest that models be evaluated by comparing their action trajectory with the optimal trajectory. If each action has an expected payoff of u<sub>a<\sub> = p<sub>ha<\sub> * v<sub>ha<\sub> + p<sub>ma<\sub> * v<sub>ma<\sub> + p<sub>la<\sub> * v<sub>la<\sub> and the terminal payoff can be represented as u = &#8721; <sub>i=1<\sub> <sub>k<\sup> {u<sub>i<\sub>}, where i is the action taken at round n out of k total rounds, the optimal trajectory is the one which achieves max{u}, i.e. argmax<sub>k<\sub>{u}. 
