@@ -21,11 +21,8 @@ OUTPUT_FILE = os.getenv("OUTPUT_FILE", "pairs.csv")
 
 client = OpenAI(api_key="")
 
-def generate_game(category, game_type, num_rounds, lpayoff, mpayoff, hpayoff):
+def generate_game(category, game_type, num_rounds, lpayoff, mpayoff, hpayoff, lchance, mchance, hchance):
     """Generate a prompt string for a given topic."""
-    hchance = float(decimal.Decimal(random.randrange(40, 60))/100)
-    mchance = float(decimal.Decimal(random.randrange(20, int(hchance / 3 * 200)))/100)
-    lchance = 1 - hchance - mchance
 
     return dedent(
         f"""
@@ -38,9 +35,9 @@ def generate_game(category, game_type, num_rounds, lpayoff, mpayoff, hpayoff):
         """
     )
 
-def generate_examples(num_examples, category, game_type, num_rounds, lpayoff, mpayoff, hpayoff):
+def generate_examples(num_examples, category, game_type, num_rounds, lpayoff, mpayoff, hpayoff, lchance, mchance, hchance):
     """Generate examples for a given topic using the OpenAI API."""
-    prompt = generate_game(category, game_type, num_rounds, lpayoff, mpayoff, hpayoff)
+    prompt = generate_game(category, game_type, num_rounds, lpayoff, mpayoff, hpayoff, lchance, mchance, hchance)
     examples = []
 
     for example_num in range(num_examples):
@@ -69,6 +66,43 @@ def generate_examples(num_examples, category, game_type, num_rounds, lpayoff, mp
 
     return examples
 
+def process_data(lpayoff, mpayoff, hpayoff, lchance, mchance, hchance):
+    max_expected_payoff = float('-inf')
+
+    best_action = None
+
+    actions = ['Cooperation', 'Deception', 'Aggression']
+    
+    for action in actions:
+
+        if action == 'Cooperation':
+            expected_payoff = hchance * hpayoff + mchance * mpayoff + lchance * lpayoff
+
+        elif action == 'Deception':
+            expected_payoff = lchance * hpayoff + hchance * mpayoff + mchance * lpayoff
+        
+        elif action == 'Aggression':
+            expected_payoff = lchance * hpayoff + mchance * mpayoff + hchance * lpayoff
+
+        if expected_payoff > max_expected_payoff:
+
+            max_expected_payoff = expected_payoff
+
+            best_action = action
+
+    return best_action, max_expected_payoff
+
+    # Example usage
+
+    if __name__ == '__main__':
+
+        # Define the available actions and their payoff probabilities
+
+        # Calculate the action with the highest expected payoff
+        best_action, max_expected_payoff = calculate_highest_expected_payoff(actions)
+        print(f"The best action is {best_action} with an expected payoff of {max_expected_payoff}")
+
+
 def main():
     # Topical prompts
     categories = ["natural disaster", "war", "political crisis", "cybersecurity", "rescue mission"]
@@ -80,6 +114,10 @@ def main():
     lpayoff = 1
     mpayoff = 5
     hpayoff = 10
+
+    hchance = float(decimal.Decimal(random.randrange(40, 60))/100)
+    mchance = float(decimal.Decimal(random.randrange(20, int(hchance / 3 * 200)))/100)
+    lchance = 1 - hchance - mchance
 
     '''
     match game_type:
@@ -122,11 +160,13 @@ def main():
 
         for category in categories:
             logger.info(f"Generating examples for topic: {category}")
-            examples = generate_examples(NUM_EXAMPLES, category, game_type, num_rounds, lpayoff, mpayoff, hpayoff)
+            examples = generate_examples(NUM_EXAMPLES, category, game_type, num_rounds, lpayoff, mpayoff, hpayoff, lchance, mchance, hchance)
             writer.writerows(examples)
             logger.info(f"Generated {len(examples)} examples for category: {category}")
 
     logger.info(f"Training data generated successfully. Output file: {OUTPUT_FILE}")
+
+    print(process_data(lpayoff, mpayoff, hpayoff, lchance, mchance, hchance))
 
 if __name__ == "__main__":
     main()
