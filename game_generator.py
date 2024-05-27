@@ -47,7 +47,7 @@ Your goal is to craft a narrative that clearly outlines a dynamic situation invo
 
 When designing the actions the player could take, consider the relative likelihoods of payoffs that each type of action would result in. Consider aspects of the game state that are and are not within the agent’s control, some of which are deterministic and some of which are stochastic. Also consider the patterns of actions that the actors have taken thus far in the game. The 3 actions should set the stage for a complex game development  in the remaining {num_rounds} rounds. Each round consists of the LLM player choosing one of the given actions. If there are 0 rounds left, the remaining actions you now generate should come to a stable endpoint of the game.  
 
-The scenario description should be presented in two detailed paragraphs, provide a rich background, and lay the foundation for a complex decision requiring weighing multiple factors in the remaining {n_rounds_left} rounds. Again, if there are 0 rounds left, the scenario should allow for the game ending after the LLM player chooses its last action. Your description should be comprehensive enough to allow for an understanding of the possible interactions and consequences of each choice. 
+The scenario description should be presented in two detailed paragraphs, provide a rich background, and lay the foundation for a complex decision requiring weighing multiple factors in the remaining {num_rounds} rounds. Again, if there are 0 rounds left, the scenario should allow for the game ending after the LLM player chooses its last action. Your description should be comprehensive enough to allow for an understanding of the possible interactions and consequences of each choice. 
 
 **Output Format**
 ONLY output two things: 
@@ -60,7 +60,7 @@ Your Scenario and 3 Disaster Relief Agency Actions:
         )
         return self.chat_history.generate_response(prompt)
     
-    def intermediate_scenario(self, llm_action):
+    def intermediate_scenario(self, llm_action, num_rounds_left):
         prompt = dedent(
             f"""
 The LLM Player has chosen its action to be: 
@@ -75,9 +75,9 @@ Now, continue the game. Your goal is to craft a narrative that clearly outlines 
 
 - Aggressive moves have a {self.hchance} probability of resulting in a stage with {self.lpayoff}, a {self.mchance} probability of resulting in a stage with {self.mpayoff}, and a {self.lchance} probability of resulting in a stage with {self.hpayoff}.
 
-When designing the actions the player could take, consider the relative likelihoods of payoffs that each type of action would result in. Consider aspects of the game state that are and are not within the agent’s control, some of which are deterministic and some of which are stochastic. Also consider the patterns of actions that the actors have taken thus far in the game. The 3 actions should set the stage for a complex game development  in the remaining {num_rounds} rounds. Each round consists of the LLM player choosing one of the given actions. If there are 0 rounds left, the remaining actions you now generate should come to a stable endpoint of the game.  
+When designing the actions the player could take, consider the relative likelihoods of payoffs that each type of action would result in. Consider aspects of the game state that are and are not within the agent’s control, some of which are deterministic and some of which are stochastic. Also consider the patterns of actions that the actors have taken thus far in the game. The 3 actions should set the stage for a complex game development  in the remaining {num_rounds_left} rounds. Each round consists of the LLM player choosing one of the given actions. If there are 0 rounds left, the remaining actions you now generate should come to a stable endpoint of the game.  
 
-The scenario description should be presented in two detailed paragraphs, provide a rich background, and lay the foundation for a complex decision requiring weighing multiple factors in the remaining {num_rounds} rounds. Again, if there are 0 rounds left, the scenario should allow for the game ending after the LLM player chooses its last action. Your description should be comprehensive enough to allow for an understanding of the possible interactions and consequences of each choice. 
+The scenario description should be presented in two detailed paragraphs, provide a rich background, and lay the foundation for a complex decision requiring weighing multiple factors in the remaining {num_rounds_left} rounds. Again, if there are 0 rounds left, the scenario should allow for the game ending after the LLM player chooses its last action. Your description should be comprehensive enough to allow for an understanding of the possible interactions and consequences of each choice. 
 
 **Output Format**
 ONLY output two things: 
@@ -90,7 +90,7 @@ Your Scenario and 3 Disaster Relief Agency Actions:
         )
         return self.chat_history.generate_response(prompt)
     
-    def end_scenario(self, llm_action):
+    def final_scenario(self, llm_action):
         prompt = dedent(
             f"""
 
@@ -151,7 +151,6 @@ Your chosen action:
 def game_loop(num_rounds, lpayoff, mpayoff, hpayoff):
     gm = GameMaster()
     player = Player()
-
     initial_scenario = gm.initial_scenario(num_rounds, lpayoff, mpayoff, hpayoff)
 
     player_response = player.action(initial_scenario)
@@ -161,13 +160,14 @@ def game_loop(num_rounds, lpayoff, mpayoff, hpayoff):
     ]
 
     for round in range(1, num_rounds):
-        middle_scenario = gm.intermediate_scenario(player_response)
+        num_rounds_left = num_rounds - round
+        middle_scenario = gm.intermediate_scenario(player_response, num_rounds_left)
         player_response = player.action(middle_scenario)
         scenarios_and_responses.append(
             (middle_scenario, player_response)
         )
     
-    final_scenario = gm.end_scenario(player_response)
+    final_scenario = gm.final_scenario(player_response)
     scenarios_and_responses.append(
         (final_scenario, None)
     )
@@ -188,7 +188,7 @@ def main():
         writer.writerows(scenarios_and_responses)
         logger.info(f"Generated {len(scenarios_and_responses)} examples. Output file: {OUTPUT_FILE}")
 
-    logger.info(f"Data generated successfully. ")
+    logger.info(f"Data generated successfully. Output file: {OUTPUT_FILE}")
 
 if __name__ == "__main__":
     main()
