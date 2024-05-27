@@ -18,7 +18,16 @@ logger = logging.getLogger(__name__)
 NUM_EXAMPLES = int(os.getenv("NUM_EXAMPLES", "1"))
 OUTPUT_FILE = os.getenv("OUTPUT_FILE", "pairs.csv")
 
-def generate_game(category, game_type, num_rounds, lpayoff, mpayoff, hpayoff):
+
+class GameMaster:
+    pass
+
+
+class Player:
+    pass
+
+
+def generate_game(category, num_rounds, lpayoff, mpayoff, hpayoff):
     """Generate a prompt string for a given topic."""
     hchance = float(decimal.Decimal(random.randrange(40, 60))/100)
     mchance = float(decimal.Decimal(random.randrange(20, int(hchance / 3 * 200)))/100)
@@ -35,9 +44,9 @@ def generate_game(category, game_type, num_rounds, lpayoff, mpayoff, hpayoff):
         """
     )
 
-def generate_examples(num_examples, category, game_type, num_rounds, lpayoff, mpayoff, hpayoff):
+def generate_examples(num_examples, category, num_rounds, lpayoff, mpayoff, hpayoff):
     """Generate examples for a given topic using the OpenAI API."""
-    prompt = generate_game(category, game_type, num_rounds, lpayoff, mpayoff, hpayoff)
+    prompt = generate_game(category, num_rounds, lpayoff, mpayoff, hpayoff)
     examples = []
 
     for example_num in range(num_examples):
@@ -55,48 +64,11 @@ def main():
     # Topical prompts
     categories = ["natural disaster", "war", "political crisis", "cybersecurity", "rescue mission"]
     
-    game_type = random.randrange(0, 5)
-
     num_rounds = 10
 
     lpayoff = 1
     mpayoff = 5
     hpayoff = 10
-
-    '''
-    match game_type:
-        case 0:
-            cpayoff = hpayoff
-            dpayoff = mpayoff
-            vpayoff = lpayoff
-
-        case 1:
-            cpayoff = hpayoff
-            dpayoff = lpayoff
-            vpayoff = mpayoff
-
-        case 2:
-            cpayoff = mpayoff
-            dpayoff = hpayoff
-            vpayoff = lpayoff
-
-
-        case 3:
-            cpayoff = mpayoff
-            dpayoff = lpayoff
-            vpayoff = hpayoff
-
-        case 4:
-            cpayoff = lpayoff
-            dpayoff = hpayoff
-            vpayoff = mpayoff
-
-        case 5:
-            cpayoff = lpayoff
-            dpayoff = mpayoff
-            vpayoff = hpayoff
-
-    '''
 
     with open(OUTPUT_FILE, "w", newline="") as file:
         writer = csv.writer(file)
@@ -104,7 +76,7 @@ def main():
 
         for category in categories:
             logger.info(f"Generating examples for topic: {category}")
-            examples = generate_examples(NUM_EXAMPLES, category, game_type, num_rounds, lpayoff, mpayoff, hpayoff)
+            examples = generate_examples(NUM_EXAMPLES, category, num_rounds, lpayoff, mpayoff, hpayoff)
             writer.writerows(examples)
             logger.info(f"Generated {len(examples)} examples for category: {category}")
 
