@@ -5,8 +5,6 @@ from openai import OpenAI
 
 # Load constants from environment variables
 MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
-NUM_EXAMPLES = int(os.getenv("NUM_EXAMPLES", "1"))
-OUTPUT_FILE = os.getenv("OUTPUT_FILE", "pairs.csv")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 client = OpenAI(api_key=OPENAI_API_KEY)
