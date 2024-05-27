@@ -13,3 +13,7 @@ The prompts and model completions for each round are listed in run2.csv, run3.cs
 ### Game Context
 
 The game was designed such that the payoffs for choosing a cooperative, deceptive, or aggressive action were different in each game. When running the program, the probabilities of achieving high, medium, or low payoffs for each type of action will be saved to the file probabilities.csv. 
+
+### Generalization
+
+We suggest that models be evaluated by comparing their action trajectory with the optimal trajectory. If each action has an expected payoff of ua = pha * vha + pma * vma + pla * vla and the terminal payoff can be represented as u = sumi=1, k{uk}, where k is the action taken at round n, the optimal trajectory is the one which achieves max{u}, i.e. argmaxk{u}. &#8721; 
