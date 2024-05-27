@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 NUM_EXAMPLES = int(os.getenv("NUM_EXAMPLES", "1"))
 OUTPUT_FILE = os.getenv("OUTPUT_FILE", "pairs.csv")
+PROBABILITIES_OUTPUT_FILE = os.getenv("PROBABILITIES_OUTPUT_FILE", "probabilities.csv")
 
 class GameMaster:
     def __init__(self):
@@ -234,6 +235,26 @@ def main():
         logger.info(f"Generated {len(scenarios_and_responses)} examples. Output file: {OUTPUT_FILE}")
 
     logger.info(f"Data generated successfully. Output file: {OUTPUT_FILE}")
+
+
+    with open(PROBABILITIES_OUTPUT_FILE, "w", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(["", "Probability"])  
+
+        hchance, mchance, lchance = generate_chances()
+
+        writer.writerow(["Cooperative P(payoff=1)", lchance])
+        writer.writerow(["Cooperative P(payoff=5)", mchance])
+        writer.writerow(["Cooperative P(payoff=10)", hchance])
+
+        writer.writerow(["Deceptive P(payoff=1)", mchance])
+        writer.writerow(["Deceptive P(payoff=5)", hchance])
+        writer.writerow(["Deceptive P(payoff=10)", lchance])
+
+        writer.writerow(["Aggressive P(payoff=1)", hchance])
+        writer.writerow(["Aggressive P(payoff=5)", mchance]) 
+        writer.writerow(["Aggressive P(payoff=10)", lchance])   
+
 
 if __name__ == "__main__":
     main()
