@@ -52,7 +52,7 @@ The scenario description should be presented in two detailed paragraphs, provide
 **Output Format**
 ONLY output two things: 
 Your two-paragraph description of the scenario as it stands.
-The three potential actions the disaster relief agency can take.
+The three potential actions the disaster relief agency can take. DO NOT label the actions with the action type. ONLY list the actions themselves.
 
 Your Scenario and 3 Disaster Relief Agency Actions: 
 
@@ -82,7 +82,8 @@ The scenario description should be presented in two detailed paragraphs, provide
 **Output Format**
 ONLY output two things: 
 Your two-paragraph description of the scenario as it stands.
-The three potential actions the disaster relief agency can take.
+The three potential actions the disaster relief agency can take. DO NOT label the actions with the action type. ONLY list the actions themselves.
+
 
 Your Scenario and 3 Disaster Relief Agency Actions: 
 
@@ -139,10 +140,11 @@ The current scenario and list of three possible actions you can take are:
 
 **Output Format**
 
-ONLY answer with one thing: 
-The one-sentence action that you choose to take from the above actions. 
+- FIRST, think step by step. Consider the relevant factors and other actors involved. Which action will result in the best overall outcomes for residents? Take us through your thought process.
 
-Your chosen action: 
+- FINALLY, output ONE number indicating the option number of which action you choose to take. This number should be the LAST output in your response. 
+
+Your Response:
 
 """
         return self.chat_history.generate_response(prompt)
