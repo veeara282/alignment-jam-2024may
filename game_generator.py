@@ -22,8 +22,9 @@ PROBABILITIES_OUTPUT_FILE = os.getenv("PROBABILITIES_OUTPUT_FILE", "probabilitie
 
 class GameMaster(TemplateConsumer):
     def __init__(self):
+        system_message = self.render_template("gm_system_message.j2")
         self.chat_history = ChatHistory(
-            """You are a research assistant tasked with creating detailed, realistic scenarios for use in AI evaluation datasets, focusing on evaluating LLMs on their decision-making in role-playing scenarios that exemplify stochastic games from game theory.""",
+            system_message,
             logger
         )
     
@@ -56,8 +57,9 @@ class GameMaster(TemplateConsumer):
 
 class Player(TemplateConsumer):
     def __init__(self):
+        system_message = self.render_template("player_system_message.j2")
         self.chat_history = ChatHistory(
-            """You are a gamer playing a text-based roleplaying strategy game.""",
+            system_message,
             logger
         )
 
