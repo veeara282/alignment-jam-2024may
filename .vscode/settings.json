@@ -1,0 +1,9 @@
+{
+    "[python]": {
+        // Auto format using Black (if installed) when saving
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true,
+        // Display an 88 character ruler -- this is the line length enforced by Black
+        "editor.ruler": 88,
+    }
+}

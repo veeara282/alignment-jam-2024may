@@ -2,8 +2,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 
 
 JINJA_ENV = Environment(
-    loader=PackageLoader("template_utils", "prompts"),
-    autoescape=select_autoescape()
+    loader=PackageLoader("template_utils", "prompts"), autoescape=select_autoescape()
 )
 
 
