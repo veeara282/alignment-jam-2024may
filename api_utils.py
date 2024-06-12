@@ -1,7 +1,7 @@
 import os
-
-from openai import OpenAI
-
+import openai
+from openai import OpenAI # Sai: couldn't import
+import torch 
 
 # Load constants from environment variables
 MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
@@ -40,3 +40,31 @@ class ChatHistory:
         except Exception as e:
             self.logger.error(f"Unexpected error: {e}")
             return None
+        
+class Hf_ChatHistory:
+    def __init__(self, system_message, logger, model, tokenizer):
+        #self.messages = [{"role": "system", "content": system_message}]
+        self.model = model
+        self.tokenizer = tokenizer  
+        self.logger = logger
+
+    def generate_response(self, prompt, max_new_tokens=100):
+        # Tokenize the input
+        input_ids = self.tokenizer.encode(prompt, return_tensors="pt").to(self.model.device)
+
+        # Generate text (enable sampling and set other parameters)
+        output_sequences = self.model.generate(
+            input_ids=input_ids,
+            max_new_tokens=max_new_tokens,
+            do_sample=True,  # Enable sampling
+            temperature=0.7,  # Control randomness
+            top_k=50,         # Limit vocabulary for generation
+            top_p=0.95,        # Nucleus sampling
+            pad_token_id=self.tokenizer.pad_token_id, # Set pad token ID
+            attention_mask = torch.ones(input_ids.shape, dtype=torch.long).to(self.model.device) # Create attention mask
+        )
+
+        # Decode the generated output
+        generated_text = self.tokenizer.decode(output_sequences[0], skip_special_tokens=True)
+        return generated_text
+   
