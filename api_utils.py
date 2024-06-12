@@ -48,7 +48,7 @@ class Hf_ChatHistory:
         self.tokenizer = tokenizer  
         self.logger = logger
 
-    # Removed max_new_tokens: Maximum number of tokens to generate
+    
     def generate_response(self, prompt):
         # Tokenize the input
         input_ids = self.tokenizer.encode(prompt, return_tensors="pt").to(self.model.device)
@@ -57,6 +57,7 @@ class Hf_ChatHistory:
         output_sequences = self.model.generate(
             input_ids=input_ids,
             do_sample=True,  # Enable sampling
+            max_new_tokens=2500,  # Limit the length of the output
             temperature=0.7,  # Control randomness
             top_k=50,         # Limit vocabulary for generation
             top_p=0.95,        # Nucleus sampling

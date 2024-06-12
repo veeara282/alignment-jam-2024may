@@ -39,5 +39,5 @@ model_path = os.path.expanduser('~/.cache/huggingface/models/google/recurrentgem
 model_name = "google/recurrentgemma-9b"
 tokenizer = AutoTokenizer.from_pretrained(model_name, token=HF_TOKEN)
 tokenizer.save_pretrained(tokenizer_path)
-model = AutoModel.from_pretrained(model_name, token=HF_TOKEN)
+model = model.RecurrentGemmaForCausalLM.from_pretrained(model_name, token=HF_TOKEN)
 model.save_pretrained(model_path)
