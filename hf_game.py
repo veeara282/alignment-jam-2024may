@@ -20,13 +20,8 @@ PROBABILITIES_OUTPUT_FILE = os.getenv("PROBABILITIES_OUTPUT_FILE", "probabilitie
 
 
 """
-# Initialize the model and tokenizer
-model_name = "mistralai/Mistral-7B-Instruct-v0.3"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForCausalLM.from_pretrained(model_name)
-"""
+# alternative to recurrentgemma model
 
-"""
 # This mistral model requires MistralForCausalLM or AutoModelForCausalLM
 tokenizer_path = os.path.expanduser('~/.cache/huggingface/tokenizers/mistralai/Mistral-7B-Instruct-v0.3')
 model_path = os.path.expanduser('~/.cache/huggingface/models/mistralai/Mistral-7B-Instruct-v0.3')
@@ -38,8 +33,8 @@ pl_model = AutoModelForCausalLM.from_pretrained(model_path)
 
 """
 
-
-# This recurrentgemma model requires RecurrentGemmaForCausalLM
+# alternative to mistral model
+# RecurrentGemmaForCausalLM required here for recurrentgemma model
 tokenizer_path = os.path.expanduser('~/.cache/huggingface/tokenizers/google/recurrentgemma-9b/')
 model_path = os.path.expanduser('~/.cache/huggingface/models/google/recurrentgemma-9b/')
 
