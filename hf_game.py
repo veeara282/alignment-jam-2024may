@@ -1,4 +1,4 @@
-from transformers import AutoTokenizer, AutoModel, AutoModelForCausalLM
+from transformers import AutoTokenizer, AutoModelForCausalLM, RecurrentGemmaForCausalLM, MistralForCausalLM
 import csv
 import logging
 import os
@@ -26,23 +26,30 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(model_name)
 """
 
+"""
+# This mistral model requires MistralForCausalLM or AutoModelForCausalLM
+tokenizer_path = os.path.expanduser('~/.cache/huggingface/tokenizers/mistralai/Mistral-7B-Instruct-v0.3')
+model_path = os.path.expanduser('~/.cache/huggingface/models/mistralai/Mistral-7B-Instruct-v0.3')
+# Load the tokenizer and model from the local directory
+gm_tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
+gm_model = AutoModelForCausalLM.from_pretrained(model_path)
+pl_tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)    
+pl_model = AutoModelForCausalLM.from_pretrained(model_path) 
 
-#tokenizer_path = os.path.expanduser('~/.cache/huggingface/tokenizers/mistralai/Mistral-7B-Instruct-v0.3')
-
-#model_path = os.path.expanduser('~/.cache/huggingface/models/mistralai/Mistral-7B-Instruct-v0.3')
+"""
 
 
-
-tokenizer_path = os.path.expanduser('~/.cache/huggingface/tokenizers/google/recurrentgemma-9b')
-
-model_path = os.path.expanduser('~/.cache/huggingface/models/google/recurrentgemma-9b')
-
+# This recurrentgemma model requires RecurrentGemmaForCausalLM
+tokenizer_path = os.path.expanduser('~/.cache/huggingface/tokenizers/google/recurrentgemma-9b/')
+model_path = os.path.expanduser('~/.cache/huggingface/models/google/recurrentgemma-9b/')
 
 # Load the tokenizer and model from the local directory
 gm_tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
-gm_model = AutoModel.from_pretrained(model_path)
+gm_model = RecurrentGemmaForCausalLM.from_pretrained(model_path)
 pl_tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)    
-pl_model = AutoModel.from_pretrained(model_path) 
+pl_model = RecurrentGemmaForCausalLM.from_pretrained(model_path) 
+
+
 
 class GameMaster(TemplateConsumer):
     def __init__(self, model, tokenizer):
