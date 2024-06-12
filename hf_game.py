@@ -1,19 +1,3 @@
-import subprocess
-
-# Function to run pip commands
-def run_pip_command(command):
-    try:
-        # Use subprocess to execute the pip command
-        result = subprocess.run(['pip'] + command.split(), check=True, text=True, capture_output=True)
-        print("Output:", result.stdout)
-    except subprocess.CalledProcessError as e:
-        print("Error:", e.stderr)
-
-# Example usage
-run_pip_command('install transformers')  # To install the numpy package
-
-
-
 import transformers 
 from transformers import AutoTokenizer, AutoModelForCausalLM, RecurrentGemmaForCausalLM, MistralForCausalLM
 import csv
@@ -36,7 +20,7 @@ OUTPUT_FILE = os.getenv("OUTPUT_FILE", "pairs.csv")
 PROBABILITIES_OUTPUT_FILE = os.getenv("PROBABILITIES_OUTPUT_FILE", "probabilities.csv")
 
 
-"""
+
 # alternative to recurrentgemma model
 
 # This mistral model requires MistralForCausalLM or AutoModelForCausalLM
@@ -48,9 +32,10 @@ gm_model = AutoModelForCausalLM.from_pretrained(model_path)
 pl_tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)    
 pl_model = AutoModelForCausalLM.from_pretrained(model_path) 
 
-"""
 
+"""
 # alternative to mistral model
+# pip show error while loading model shards?
 # RecurrentGemmaForCausalLM required here for recurrentgemma model
 tokenizer_path = os.path.expanduser('~/.cache/huggingface/tokenizers/google/recurrentgemma-9b/')
 model_path = os.path.expanduser('~/.cache/huggingface/models/google/recurrentgemma-9b/')
@@ -61,7 +46,7 @@ gm_model = RecurrentGemmaForCausalLM.from_pretrained(model_path)
 pl_tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)    
 pl_model = RecurrentGemmaForCausalLM.from_pretrained(model_path) 
 
-
+"""
 
 class GameMaster(TemplateConsumer):
     def __init__(self, model, tokenizer):
