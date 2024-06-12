@@ -1,3 +1,4 @@
+import transformers 
 from transformers import AutoTokenizer, AutoModelForCausalLM, RecurrentGemmaForCausalLM, MistralForCausalLM
 import csv
 import logging
