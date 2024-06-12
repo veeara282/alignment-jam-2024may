@@ -2,7 +2,7 @@ import os
 
 from openai import OpenAI
 
-
+import torch
 # Load constants from environment variables
 MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")

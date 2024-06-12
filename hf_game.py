@@ -33,9 +33,9 @@ model = AutoModelForCausalLM.from_pretrained(model_name)
 
 
 
-tokenizer_path = os.path.expanduser('~/.cache/huggingface/tokenizers/gpt2-large')
+tokenizer_path = os.path.expanduser('~/.cache/huggingface/tokenizers/google/recurrentgemma-9b')
 
-model_path = os.path.expanduser('~/.cache/huggingface/models/gpt2-large')
+model_path = os.path.expanduser('~/.cache/huggingface/models/google/recurrentgemma-9b')
 
 
 # Load the tokenizer and model from the local directory
@@ -107,15 +107,19 @@ def game_loop(num_rounds, lpayoff, mpayoff, hpayoff, lchance, mchance, hchance):
     player_response = player.action(initial_scenario)
 
     scenarios_and_responses = [(initial_scenario, player_response)]
-
+    print("Initial Scenario: ", initial_scenario)
+    print("Player Response: ", player_response)
     for round in range(1, num_rounds):
         num_rounds_left = num_rounds - round
         middle_scenario = gm.intermediate_scenario(player_response, num_rounds_left)
         player_response = player.action(middle_scenario)
         scenarios_and_responses.append((middle_scenario, player_response))
-
+        print("Middle Scenario for round {round}: ", middle_scenario)
+        print("Player Response for round {round}: ", player_response)
     final_scenario = gm.final_scenario(player_response)
     scenarios_and_responses.append((final_scenario, None))
+    print("Final Scenario: ", final_scenario)
+
 
     return scenarios_and_responses
 
@@ -139,7 +143,7 @@ def process_data(lpayoff, mpayoff, hpayoff, lchance, mchance, hchance):
     return best_action, max_expected_payoff
 
 def main():
-    num_rounds = 10
+    num_rounds = 3
     lpayoff = 1
     mpayoff = 5
     hpayoff = 10
