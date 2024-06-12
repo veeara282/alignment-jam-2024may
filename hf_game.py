@@ -1,3 +1,19 @@
+import subprocess
+
+# Function to run pip commands
+def run_pip_command(command):
+    try:
+        # Use subprocess to execute the pip command
+        result = subprocess.run(['pip'] + command.split(), check=True, text=True, capture_output=True)
+        print("Output:", result.stdout)
+    except subprocess.CalledProcessError as e:
+        print("Error:", e.stderr)
+
+# Example usage
+run_pip_command('install transformers')  # To install the numpy package
+
+
+
 import transformers 
 from transformers import AutoTokenizer, AutoModelForCausalLM, RecurrentGemmaForCausalLM, MistralForCausalLM
 import csv
