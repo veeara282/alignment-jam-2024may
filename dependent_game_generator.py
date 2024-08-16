@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 NUM_EXAMPLES = int(os.getenv("NUM_EXAMPLES", "1"))
-OUTPUT_FILE = os.getenv("OUTPUT_FILE", "dependent_game_run1.csv")
+OUTPUT_FILE = os.getenv("OUTPUT_FILE", "dependent_game_explicit_payoffs_provided_run1.csv")
 PROBABILITIES_OUTPUT_FILE = os.getenv("PROBABILITIES_OUTPUT_FILE", "probabilities.csv")
 
 
@@ -109,7 +109,7 @@ class PayoffManager:
 
 
     # Refactoring #2: we could make payoffs dependent on previous drawings of payoffs
-    # so no action would have the same payoff as another action in the same round
+    # so actions wouldn't necessarily have the same payoff as another action in the same round
     
     def getPayoffForAction(self, action):
         # for the some action action_payoff_chances could be [lchance, mchance, hchance], [mchance, hchance, lchance] or [hchance, lchance, mchance]
