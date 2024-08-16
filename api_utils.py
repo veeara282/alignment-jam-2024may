@@ -1,6 +1,6 @@
 import os
 
-from openai import OpenAI
+from openai import OpenAI, OpenAIError
 
 import torch
 # Load constants from environment variables
@@ -34,7 +34,7 @@ class ChatHistory:
             response = completion.choices[0].message.content.strip()
             self.add_response(response)
             return response
-        except client.APIError as e:
+        except OpenAIError as e:
             self.logger.error(f"OpenAI API error: {e}")
             return None
         except Exception as e:

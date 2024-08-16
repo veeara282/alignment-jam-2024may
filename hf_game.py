@@ -16,12 +16,12 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 NUM_EXAMPLES = int(os.getenv("NUM_EXAMPLES", "1"))
-OUTPUT_FILE = os.getenv("OUTPUT_FILE", "pairs.csv")
-PROBABILITIES_OUTPUT_FILE = os.getenv("PROBABILITIES_OUTPUT_FILE", "probabilities.csv")
+OUTPUT_FILE = os.getenv("OUTPUT_FILE", "hf_game.csv")
+PROBABILITIES_OUTPUT_FILE = os.getenv("PROBABILITIES_OUTPUT_FILE", "hf_probabilities.csv")
 
 
 
-# alternative to recurrentgemma model
+# Option 1: Mistral model 
 
 # This mistral model requires MistralForCausalLM or AutoModelForCausalLM
 tokenizer_path = os.path.expanduser('~/.cache/huggingface/tokenizers/mistralai/Mistral-7B-Instruct-v0.3')
@@ -34,7 +34,7 @@ pl_model = AutoModelForCausalLM.from_pretrained(model_path)
 
 
 """
-# alternative to mistral model
+# Option 2: recurrent gamma model
 # pip show error while loading model shards?
 # RecurrentGemmaForCausalLM required here for recurrentgemma model
 tokenizer_path = os.path.expanduser('~/.cache/huggingface/tokenizers/google/recurrentgemma-9b/')
@@ -147,7 +147,7 @@ def process_data(lpayoff, mpayoff, hpayoff, lchance, mchance, hchance):
     return best_action, max_expected_payoff
 
 def main():
-    num_rounds = 3
+    num_rounds = 2
     lpayoff = 1
     mpayoff = 5
     hpayoff = 10
